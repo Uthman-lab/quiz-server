@@ -1,36 +1,35 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-const app = express();
-const router = require('./routes/route')
-
 require('dotenv').config()
-//const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const quizRouter = require('./routes/quiz_route.js')
+const sectionRouter = require('./routes/section_route.js')
+require('dotenv')
+const app = express();
+const connectionString = process.env.DB_URL;
+mongoose.connect(connectionString);
 
-
-
-
-// const mongoString = process.env.DATABASE_URL
-// mongoose.set('strictQuery', false)
-// mongoose.connect(mongoString)
-// const database = mongoose.connection
-
-// database.on('error',(error)=>{
-//     console.log(error)
-// })
-
-// database.once('connected',()=>{
-//     console.log("database connected")
-// })
+const db = mongoose.connection;
+mongoose.set('strictQuery', true);
 app.use(express.json())
 app.use(express.static('public'))
-app.use('/api',router)
-
-app.get('/',(req,res)=>{
-    res.json({name:"AsumahBanda"})
-})
-const port = 8080;
-
-app.listen(port,()=>{
+app.use('/quiz', quizRouter)
+app.use('/sections', sectionRouter)
    
-    console.log(`listening on htpp://localhost:${port}`)
+app.get('/', (req, res) => {
+    console.log(req.body)
+    res.send("hello")
+})
+const port = process.env.port || 8080;
+db.on('error',(error)=>{
+    console.log(error)
+})
+
+db.once('connected',()=>{
+    app.listen(port,
+
+        console.log(`listening fantastic on htpp://localhost:${port}`)
+    )
+    
+   
 })

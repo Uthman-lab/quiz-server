@@ -1,0 +1,92 @@
+
+// const express = require('express');
+// const app = express();
+// const bodyParser = require('body-parser');
+
+// // parse application/json
+// app.use(bodyParser.json());
+
+// let data = {
+//     items: [
+//         {
+//             id: 1,
+//             name: "Item 1",
+//             subItems: [
+//                 { id: 1, name: "Subitem 1" },
+//                 { id: 2, name: "Subitem 2" }
+//             ]
+//         },
+//         {
+//             id: 2,
+//             name: "Item 2",
+//             subItems: [
+//                 { id: 3, name: "Subitem 3" },
+//                 { id: 4, name: "Subitem 4" }
+//             ]
+//         }
+//     ]
+// };
+
+// // create an item
+// app.post('/items', (req, res) => {
+//     const newItem = { id: data.items.length + 1, name: req.body.name, subItems: [] };
+//     data.items.push(newItem);
+//     res.send(newItem);
+// });
+
+// // read all items
+// app.get('/items', (req, res) => {
+//     res.send(data.items);
+// });
+
+// // read one item
+// app.get('/items/:id', (req, res) => {
+//     const item = data.items.find(item => item.id == req.params.id);
+//     res.send(item);
+// });
+
+// // update an item
+// app.put('/items/:id', (req, res) => {
+//     const itemIndex = data.items.findIndex(item => item.id == req.params.id);
+//     data.items[itemIndex] = { id: data.items[itemIndex].id, name: req.body.name, subItems: data.items[itemIndex].subItems };
+//     res.send(data.items[itemIndex]);
+// });
+
+// // delete an item
+// app.delete('/items/:id', (req, res) => {
+//     data.items = data.items.filter(item => item.id != req.params.id);
+//     res.send({ message: "Item deleted" });
+// });
+
+// // create a subitem
+// app.post('/items/:itemId/subItems', (req, res) => {
+//     const item = data.items.find(item => item.id == req.params.itemId);
+//     if (!item) return res.status(404).send({ message: "Item not found" });
+//     const newSubItem = { id: item.subItems.length + 1, name: req.body.name };
+//     item.subItems.push(newSubItem);
+//     res.send(newSubItem);
+// });
+
+// get all items
+// app.get('/items', (req, res) => {
+//   res.send(data.items);
+// });
+
+// // read one item
+// app.get('/items/:id', (req, res) => {
+//   const item = data.items.find(item => item.id == req.params.id);
+//   res.send(item);
+// });
+
+// // update an item
+// app.put('/items/:id', (req, res) => {
+//   const itemIndex = data.items.findIndex(item => item.id == req.params.id);
+//   data.items[itemIndex] = { id: data.items[itemIndex].id, name: req.body.name, subItems: data.items[itemIndex].subItems };
+//   res.send(data.items[itemIndex]);
+// });
+
+// // delete an item
+// app.delete('/items/:id', (req, res) => {
+//   data.items = data.items.filter(item => item.id != req.params.id);
+//   res.send({ message: "Item deleted" });
+// });

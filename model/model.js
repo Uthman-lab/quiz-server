@@ -1,14 +1,33 @@
-// const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// const dataScheme = new mongoose.Schema({
-//     name:{
-//         required : true,
-//         type: String
-//     },
-//     age:{
-//         required : true,
-//         type: Number
-//     }
-// })
+const DataSchema = mongoose.Schema;
 
-// module.exports = mongoose.model('model',dataScheme)
+const possibleAnswer = DataSchema({
+  ans: { type: String, required: true },
+});
+
+const questionSchema = new DataSchema({
+  question: {
+    required: true,
+    type: String,
+  },
+  possibleAnswers: [String],
+  correctAnswer: { type: String, required: true },
+});
+const sectionSchema = new DataSchema({
+  name: {
+    type: String,
+    required: true,
+  },
+  questions: [questionSchema],
+});
+
+const quizSchema = new DataSchema({
+  title: {
+    type: String,
+    required: true,
+  },
+  sections: [sectionSchema],
+});
+
+module.exports = mongoose.model("Quiz", quizSchema);
