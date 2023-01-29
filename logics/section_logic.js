@@ -1,10 +1,9 @@
-const quizes = require("../data");
 const Model = require("../model/model.js");
 
 const getAllSectionHandler = async (req, res) => {
   try {
     const d = await Model.findOne({ title: req.params.title });
-    res.send(d.sections);
+    res.send(d);
   } catch (error) {
     console.log(error);
   }
@@ -12,8 +11,9 @@ const getAllSectionHandler = async (req, res) => {
 
 const getSpecificSection = async (req, res) => {
   const { title, name } = req.params;
+
   try {
-    const d = await Model.findOne({ title: req.params.title });
+    const d = await Model.findOne({ title: title });
     if (d) {
       const section = d.sections.find((val) => (val.name = name));
       res.send(section);
@@ -25,54 +25,37 @@ const getSpecificSection = async (req, res) => {
   }
 };
 
-const patchASection = (req, res) => {
+const patchASection = async (req, res) => {
   const { title, name } = req.params;
-  const data = req.body;
-  const quiz = quizes.find((val) => val.title == title);
-  if (quiz) {
-    let section = quiz.sections.find((val) => val.name == name);
-    if (section) {
-      const quizIndex = quizes.indexOf(quiz);
-      const sectionIndex = quizes[quizIndex].sections.indexOf(section);
-      quizes[quizIndex].sections[sectionIndex] = data;
-      res.send(quizes[quizIndex]);
-      return;
-    }
-  }
-  res.status(404).send("not found");
-  return;
-};
-
-const postSection = (req, res) => {
-  const data = req.body;
-  const quizTitle = req.params.quiz_title;
-  const item = quizes.find((val) => val.title == quizTitle);
-  if (item) {
-    item.sections.push(data);
-    res.send(item);
-    return;
-  } else {
-    res.status(404).send("not found");
-    return;
-  }
-};
-
-const deleteSection = (req, res) => {
-  const quizTitle = req.params.quiz_title;
-  const sectionName = req.params.section;
-  console.log(sectionName);
-  const quiz = quizes.find((val) => val.title == quizTitle);
-  if (quiz) {
-    quiz.sections.splice(
-      quiz.sections.findIndex((val) => val.name == sectionName),
-      1
+  try {
+    const d = await Model.findOneAndReplace(
+      { title: title, sections: { $elemMatch: { name: name } } },
+      { title: title, sections: [req.body] },
+      { new: true, strict: true }
     );
-    res.send(quizes);
-    return;
-  } else {
-    res.status(404).send("not found");
+    res.send(d);
+  } catch (error) {
+    res.status(404).send(error);
     return;
   }
+};
+
+const postSection = async (req, res) => {
+  try {
+    const title = req.params.quiz_title;
+    const query = await Model.findOneAndUpdate(
+      { title: title },
+      { $push: { sections: req.body } },
+      { new: true }
+    );
+    res.send(query);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+};
+
+const deleteSection = async (req, res) => {
+  //To be done later
 };
 
 module.exports = {
